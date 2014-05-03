@@ -13,6 +13,7 @@ int fast =1;
 int slow =0;
 uint8_t* dataPtrSensor; 
 int flagRight, flagLeft, flagStraight;
+int webserverFlag = 0;
 int stateStraight =0;
 uint8_t* secondRun[750];
 uint8_t* previousData;

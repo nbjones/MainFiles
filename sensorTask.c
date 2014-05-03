@@ -266,6 +266,7 @@ static portTASK_FUNCTION(vsensorTask, pvParameters) {
 				
 				//this is where the actual movement will be recorded in the map	
 				dataPtrSensor = getData(&msg);
+				webserverFlag =1;
 				
 				
 				//c = 1;
