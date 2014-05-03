@@ -8,10 +8,14 @@
 
 
 
-int curr;
-uint8_t *dataPtrSensor; 
+int curr =0;
+int fast =1;
+int slow =0;
+uint8_t* dataPtrSensor; 
 int flagRight, flagLeft, flagStraight;
-uint8_t *secondRun;
+int stateStraight =0;
+uint8_t* secondRun[750];
+uint8_t* previousData;
 
 //extern uint8_t *dataPtrSensor;
 //extern int dataList[10];
@@ -42,4 +46,5 @@ portBASE_TYPE SendsensorValueMsg(sensorStruct *sensorData,uint8_t msgtype, uint8
 portBASE_TYPE SendsensorERRORMsg(sensorStruct *sensorData, uint8_t errorType, portTickType ticksToBlock);
 
 void vGetMapData (void);
+int secondRunImp(int inc);
 #endif

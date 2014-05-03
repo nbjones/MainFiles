@@ -261,28 +261,28 @@ static portTASK_FUNCTION(vsensorTask, pvParameters) {
 			case ROVERMOVE_MSG: {
 				SendLCDPrintMsg(param->lcdData,20,"RCV: Move Data",portMAX_DELAY);
 
+				//store the last runs information here in order to collect distance data
+				previousData = dataPtrSensor;
 				
 				//this is where the actual movement will be recorded in the map	
-
-				
 				dataPtrSensor = getData(&msg);
-
-				// second run data storage
-				secondRun[curr] = dataPtrSensor[0];
-				curr++;
-				secondRun[curr] = dataPtrSensor[1];
-				curr++;
-				secondRun[curr] = dataPtrSensor[2];
-				curr++;
-				secondRun[curr] = dataPtrSensor[3];
-				curr++;
-				secondRun[curr] = dataPtrSensor[4];
-				curr++;
-				secondRun[curr] = dataPtrSensor[5];
-				curr++;
+				
+				
 				//c = 1;
-				if(dataPtrSensor[1] == 0x01) 
+				if(dataPtrSensor[1] == 0x01){ 
 					SendsensorGatherMsg(param);
+
+					int temp = 0;
+					int i; 
+					for (i=0;i<=5;i++){
+
+					secondRun[temp][i] = dataPtrSensor[i];
+
+					temp++;
+				}
+
+				}
+
 
 				
 				
@@ -306,6 +306,8 @@ void vGetMapData(void){
 		  flagRight = 1;
 		  flagLeft = 0;
 		  flagStraight = 0;
+		  if ((dataPtrSensor[2]-previousData[2])<= 0x02){
+		  }
 		  //sprintf(uip_appdata, "ctx.lineTo(200,150);\n");
 		}
 	if (dataPtrSensor[3] > dataPtrSensor[2]){
@@ -314,12 +316,34 @@ void vGetMapData(void){
 		 flagStraight = 0;
 		}
 	    //rover has made a left-hand turn, assume obstacle or corner 
+
 	if (dataPtrSensor[3] == dataPtrSensor[2]){
 			flagStraight = 1;
 			flagLeft = 0;
 			flagRight = 0;
-		//rover is going straight, take note of distance
 		} 
 		}
+}
+int inc = 0;
+int secondRunImp(inc){
+		//if (secondRun[inc][3]==secondRun[inc][2]){
+		if (inc==0){
+			if (secondRun[inc][3]>=	  0x5b){
+				return fast;
+			}
+			else 
+				return slow;	
+		}
+		else{
+		   if ((secondRun[inc][3]-secondRun[inc-1][3])>= 0x5b){
+		   		return fast;
+		   }
+		   else
+		   		return slow;
+		}
+		
+	//	}
+		//else 
+		//	return slow;
 }
 
